@@ -1,9 +1,10 @@
 package com.ohgiraffers;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class OfferInfo {
+public class OfferInfo implements Serializable {
     private String companyName;
     private String position;
     private String location;
