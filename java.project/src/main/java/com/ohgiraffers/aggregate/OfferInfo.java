@@ -1,4 +1,4 @@
-package com.ohgiraffers;
+package com.ohgiraffers.aggregate;
 
 import java.io.Serializable;
 import java.util.Arrays;
