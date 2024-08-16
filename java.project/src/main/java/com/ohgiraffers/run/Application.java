@@ -1,26 +1,46 @@
 package com.ohgiraffers.run;
 
-import com.ohgiraffers.service.OfferFindService;
+import com.ohgiraffers.Login.Login;
+import com.ohgiraffers.service.allOfferSearch;
 import com.ohgiraffers.service.OfferRegistService;
-import com.ohgiraffers.repository.OfferRepository;
 import com.ohgiraffers.aggregate.OfferInfo;
 
 
 import java.util.Scanner;
 
 public class Application {
-    public static final OfferFindService offerFindService = new OfferFindService();
+    public static final allOfferSearch offerFindService = new allOfferSearch();
     public static final OfferRegistService offerRegistService = new OfferRegistService();
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+        Login login = new Login();
+
+        boolean certify = false;
+
+        while (!certify) {
+            System.out.print("아이디를 입력하세요: ");
+            String username = scanner.nextLine();
+
+            System.out.print("비밀번호를 입력하세요: ");
+            String password = scanner.nextLine();  // 로그인 화면
+
+
+            if (login.validLogin(username, password)) {
+                certify = true;
+                System.out.println("로그인에 성공했습니다.");
+            } else {
+                System.out.println("아이디 또는 비밀번호가 틀렸습니다. 다시 시도하세요.");
+            }
+        } // login 클래스에서 로그인 하는 화면
+          // 상현 구현 완료
 
 
         while(true) {
             /* 로그인 기능 : 상현이 형 */
             System.out.println("==== HR 대행 프로그램 ====");
-            System.out.println(" 1. 모든 오퍼리스트 조회 "); // 2 상현이 형
+            System.out.println(" 1. 모든 오퍼리스트 조회 "); // 2 상현이 형 구현 완료
             System.out.println(" 2. 오퍼 정보 조회 ");// 3 진석
             System.out.println(" 3. 오퍼 등록 ");// 4 윤후 형
             System.out.println(" 4. 오퍼 수정 "); // 5 윤후 형
@@ -31,10 +51,9 @@ public class Application {
 
             switch (choice) {
                 case 1:
-                    offerFindService.findAllOffer();
+                    allOfferSearch.displayAllOffers();
                     break;
                 case 2:
-                    offerFindService.findOfferByJobCode(chooseNo());
                     break;
                 case 3:
                     OfferRegistService.registOffer(signUp());
