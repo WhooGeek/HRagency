@@ -83,20 +83,18 @@ public class OfferRepository {
         return 0;
     }
 
+    @SuppressWarnings("unchecked")
     private void loadUsers(File file) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            while(true){
-                OfferInfo offer = (OfferInfo) ois.readObject();
-                if (offer != null) {
-                    offerList.add(offer);
-                }
-            }
+            ArrayList<OfferInfo> loadedList = (ArrayList<OfferInfo>) ois.readObject();
+            offerList.addAll(loadedList);
         } catch (EOFException e) {
             System.out.println("기업 정보를 모두 로딩하였습니다.");
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     public static int insertOffer(OfferInfo offerInfo){
         int result = 0;
