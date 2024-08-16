@@ -69,6 +69,20 @@ public class OfferRepository {
         return null;
     }
 
+    public static int deleteUser(int no) {
+        for(int i = 0; i < offerList.size(); i++){
+            if(offerList.get(i).getJobCode() == no){
+                offerList.remove(i);
+
+                File file = new File(FILE_PATH);
+                saveOffers(file, offerList);
+
+                return 1;
+            }
+        }
+        return 0;
+    }
+
     private void loadUsers(File file) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             while(true){

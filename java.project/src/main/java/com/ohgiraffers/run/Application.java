@@ -54,6 +54,7 @@ public class Application {
                     allOfferSearch.displayAllOffers();
                     break;
                 case 2:
+                    allOfferSearch.findOfferByJobCode(chooseNo());
                     break;
                 case 3:
                     OfferRegistService.registOffer(signUp());
@@ -63,7 +64,7 @@ public class Application {
                     if(selected == null) continue;
                     OfferRegistService.modifyOffer(reform(selected));
                     break; // 내가 할 것
-                case 5: break;
+                case 5: allOfferSearch.removeOffer(chooseNo()); break;
                 case 9:
                     System.out.println("프로그램이 종료됩니다. ");
                     return;

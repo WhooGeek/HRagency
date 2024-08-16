@@ -25,5 +25,25 @@ public class allOfferSearch {
             }
         }
     }
+
+    public static void findOfferByJobCode(int code) {
+        OfferInfo selectedOffer = OfferRepository.selectOfferByJobCode(code);
+
+        if(selectedOffer != null){
+            System.out.println(selectedOffer);
+        }else{
+            System.out.println("해당 코드를 가진 오퍼는 없습니다.");
+        }
+    }
+
+    public static void removeOffer(int no) {
+        int result = OfferRepository.deleteUser(no);
+
+        if (result == 1) {
+            System.out.println("오퍼 삭제가 완료 되었습니다.");
+        } else {
+            System.out.println("입력하신 오퍼 번호에 해당하는 오퍼가 없습니다.");
+        }
+    }
 }
 
