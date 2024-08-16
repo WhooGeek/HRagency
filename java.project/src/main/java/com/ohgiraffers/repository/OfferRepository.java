@@ -1,14 +1,15 @@
-package com.repository;
+package com.ohgiraffers.repository;
 
-import com.ohgiraffers.OfferInfo;
+import com.ohgiraffers.Strema.MyObjectOutputStream;
+import com.ohgiraffers.aggregate.OfferInfo;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class OfferRepository {
 
-    private final ArrayList<OfferInfo> offerList = new ArrayList<>();
-    private static final String FILE_PATH = "src/main/java/com/ohgiraffers/db/offerDB.dat";
+    private static final ArrayList<OfferInfo> offerList = new ArrayList<>();
+    private static final String FILE_PATH = "/Users/gim-yunhu/Desktop/개발자 되기/HRagency/java.project/src/main/java/com/ohgiraffers/db/offerDB.dat";
 
     public OfferRepository() {
         File file = new File(FILE_PATH);
@@ -20,9 +21,60 @@ public class OfferRepository {
             offerInfos.add(new OfferInfo("DB하이텍", "공정설계", "부천", 45000000, "공정 설계 활동", new String[] {"중/석식 지원", "교통비 지원","자기개발비 지원", "사내 동아리", "통신비 지원", "자녀 학자금 지원", "복지포인트 200만원"}, 3));
             offerInfos.add(new OfferInfo("네이버", "프론트엔드 개발자", "판교", 45000000, "프론트엔드 관리", new String[] {"중/석식 지원", "교통비 지원", "자기개발비 지원", "사내 동아리", "통신비 지원", "자녀 학자금 지원", "복지포인트 300만원", "개인 장비 지원"}, 4));
             offerInfos.add(new OfferInfo("카카오", "백엔드 개발자", "판교", 45000000, "백엔드 관리", new String[] {"중/석식 지원", "교통비 지원", "자기개발비 지원", "사내 동아리", "통신비 지원", "자녀 학자금 지원", "복지포인트 200만원"}, 5));
-            saveUsers(file, offerInfos);
+            saveOffers(file, offerInfos);
+        }
+        if(offerList.isEmpty()){
+        loadUsers(file);
         }
     }
+
+    public static OfferInfo selectOfferByName(String name) {
+        for(OfferInfo offer : offerList){
+            if(offer.getCompanyName().equals(name)){
+                return offer;
+            }
+        }
+        return null;
+    }
+
+    public static int updateOffer(OfferInfo offer) {
+
+        for(int i =0; i < offerList.size() ; i++){
+            if(offerList.get(i).getCompanyName().equals(offer.getCompanyName())){
+                offerList.set(i, offer);
+
+                File file = new File(FILE_PATH);
+                saveOffers(file, offerList);
+
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+
+    private static void saveOffers(File file, ArrayList<OfferInfo> offerInfos) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))){
+
+                for (OfferInfo offerInfo : offerInfos){
+
+                    oos.writeObject(offerInfo);
+                }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static OfferInfo selectOfferByJobCode(int code) {
+         for(OfferInfo offerInfo : offerList){
+             if(offerInfo.getJobCode() == code){
+                 return offerInfo;
+             }
+         }
+         return null;
+    }
+
 
     private void loadUsers(File file) {
 
@@ -39,15 +91,27 @@ public class OfferRepository {
         }
     }
 
-    private void saveUsers(File file, ArrayList<OfferInfo> offerInfos) {
 
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))){
-            for(OfferInfo offerinfo : offerInfos){
-                oos.writeObject(offerinfo);
-            }
-        }
-        catch (IOException e) {
+
+    public static int insertOffer(OfferInfo offerInfo){
+
+        int result = 0;
+
+        try(MyObjectOutputStream moos = new MyObjectOutputStream(new FileOutputStream(FILE_PATH, true))){
+
+            moos.writeObject(offerInfo);
+            offerList.add(offerInfo);
+            result = 1;
+
+        }catch(IOException e){
             throw new RuntimeException(e);
         }
+
+        return result;
+
+    }
+
+    public ArrayList<OfferInfo> selectAllOffers() {
+        return offerList;
     }
 }
