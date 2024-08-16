@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class OfferRepository {
 
     private static final ArrayList<OfferInfo> offerList = new ArrayList<>();
-    private static final String FILE_PATH = "/Users/gim-yunhu/Desktop/개발자 되기/HRagency/java.project/src/main/java/com/ohgiraffers/db/offerDB.dat";
+    private static final String FILE_PATH = "src/main/java/com/ohgiraffers/db/offerDB.dat";
 
     public OfferRepository() {
         File file = new File(FILE_PATH);
@@ -23,8 +23,9 @@ public class OfferRepository {
             offerInfos.add(new OfferInfo("카카오", "백엔드 개발자", "판교", 45000000, "백엔드 관리", new String[] {"중/석식 지원", "교통비 지원", "자기개발비 지원", "사내 동아리", "통신비 지원", "자녀 학자금 지원", "복지포인트 200만원"}, 5));
             saveOffers(file, offerInfos);
         }
+
         if(offerList.isEmpty()){
-        loadUsers(file);
+            loadUsers(file);
         }
     }
 
@@ -38,8 +39,7 @@ public class OfferRepository {
     }
 
     public static int updateOffer(OfferInfo offer) {
-
-        for(int i =0; i < offerList.size() ; i++){
+        for(int i = 0; i < offerList.size(); i++){
             if(offerList.get(i).getCompanyName().equals(offer.getCompanyName())){
                 offerList.set(i, offer);
 
@@ -52,66 +52,53 @@ public class OfferRepository {
         return 0;
     }
 
-
     private static void saveOffers(File file, ArrayList<OfferInfo> offerInfos) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))){
-
-                for (OfferInfo offerInfo : offerInfos){
-
-                    oos.writeObject(offerInfo);
-                }
-
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+            oos.writeObject(offerInfos);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static OfferInfo selectOfferByJobCode(int code) {
-         for(OfferInfo offerInfo : offerList){
-             if(offerInfo.getJobCode() == code){
-                 return offerInfo;
-             }
-         }
-         return null;
+        for(OfferInfo offerInfo : offerList){
+            if(offerInfo.getJobCode() == code){
+                return offerInfo;
+            }
+        }
+        return null;
     }
 
-
     private void loadUsers(File file) {
-
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
-
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             while(true){
-                offerList.add((OfferInfo)ois.readObject());
+                OfferInfo offer = (OfferInfo) ois.readObject();
+                if (offer != null) {
+                    offerList.add(offer);
+                }
             }
-        } catch(EOFException e){
+        } catch (EOFException e) {
             System.out.println("기업 정보를 모두 로딩하였습니다.");
-        }
-        catch (IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-
-
     public static int insertOffer(OfferInfo offerInfo){
-
         int result = 0;
 
         try(MyObjectOutputStream moos = new MyObjectOutputStream(new FileOutputStream(FILE_PATH, true))){
-
             moos.writeObject(offerInfo);
             offerList.add(offerInfo);
             result = 1;
-
-        }catch(IOException e){
+        } catch(IOException e){
             throw new RuntimeException(e);
         }
 
         return result;
-
     }
 
-    public ArrayList<OfferInfo> selectAllOffers() {
+    public static ArrayList<OfferInfo> selectAllOffers() {
         return offerList;
     }
 }
