@@ -13,6 +13,6 @@ public class MyObjectOutputStream extends ObjectOutputStream{
     // 유저 정보를 추가 입력하여 파일을 쓸 때는 streawm header 정보가 출력되지 않도록 메소드 재작성
     @Override
     protected void writeStreamHeader() throws IOException {
-
+        super.writeStreamHeader();
     }
 }

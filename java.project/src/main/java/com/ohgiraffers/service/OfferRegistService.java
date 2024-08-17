@@ -7,11 +7,6 @@ import com.ohgiraffers.repository.OfferRepository;
 
 public class OfferRegistService {
 
-    public final OfferRepository offerRepository = new  OfferRepository();
-
-
-
-
 
     public static void registOffer(OfferInfo offerInfo){
 
@@ -52,4 +47,7 @@ public class OfferRegistService {
 
 
     }
+
+
+
 }

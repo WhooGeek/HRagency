@@ -9,8 +9,8 @@ public class Login {
 
     public Login() {
         users.add(new User("hyun", "1234"));
-        users.add(new User("whoo", "4355"));
-        users.add(new User("seok", "4443"));
+        users.add(new User("whoo", "5678"));
+        users.add(new User("seok", "1234"));
     }
 
 

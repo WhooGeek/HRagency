@@ -20,9 +20,7 @@ public class allOfferSearch {
             System.out.println("등록된 오퍼가 없습니다.");
         } else {
             System.out.println(" ==== 모든 오퍼 리스트 조회 ==== ");
-            for (OfferInfo offer : offerList) {
-                System.out.println(offer);
-            }
+            offerList.forEach(System.out::println);
         }
     }
 

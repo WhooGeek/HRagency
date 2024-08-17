@@ -1,6 +1,7 @@
 package com.ohgiraffers.run;
 
 import com.ohgiraffers.Login.Login;
+import com.ohgiraffers.repository.OfferRepository;
 import com.ohgiraffers.service.allOfferSearch;
 import com.ohgiraffers.service.OfferRegistService;
 import com.ohgiraffers.aggregate.OfferInfo;
@@ -8,11 +9,16 @@ import com.ohgiraffers.aggregate.OfferInfo;
 
 import java.util.Scanner;
 
+
+
 public class Application {
     public static final allOfferSearch offerFindService = new allOfferSearch();
     public static final OfferRegistService offerRegistService = new OfferRegistService();
 
     public static void main(String[] args) {
+
+        // 프로그램 시작 시 데이터가 로드되었는지 확인
+        System.out.println("Loaded offers: " + OfferRepository.selectAllOffers().size());
 
         Scanner scanner = new Scanner(System.in);
         Login login = new Login();
@@ -33,18 +39,16 @@ public class Application {
             } else {
                 System.out.println("아이디 또는 비밀번호가 틀렸습니다. 다시 시도하세요.");
             }
-        } // login 클래스에서 로그인 하는 화면
-          // 상현 구현 완료
+        }
 
 
         while(true) {
-            /* 로그인 기능 : 상현이 형 */
             System.out.println("==== HR 대행 프로그램 ====");
-            System.out.println(" 1. 모든 오퍼리스트 조회 "); // 2 상현이 형 구현 완료
-            System.out.println(" 2. 오퍼 정보 조회 ");// 3 진석
-            System.out.println(" 3. 오퍼 등록 ");// 4 윤후 형
-            System.out.println(" 4. 오퍼 수정 "); // 5 윤후 형
-            System.out.println(" 5. 오퍼 삭제"); // 6 진석
+            System.out.println(" 1. 모든 오퍼리스트 조회 ");
+            System.out.println(" 2. 오퍼 정보 조회 ");
+            System.out.println(" 3. 오퍼 등록 ");
+            System.out.println(" 4. 오퍼 수정 ");
+            System.out.println(" 5. 오퍼 삭제");
             System.out.println(" 9. 프로그램 종료");
             System.out.println(" 서비스 선택 : ");
             int choice = scanner.nextInt();
@@ -65,6 +69,8 @@ public class Application {
                     OfferRegistService.modifyOffer(reform(selected));
                     break; // 내가 할 것
                 case 5: allOfferSearch.removeOffer(chooseNo()); break;
+                case 6:
+                    OfferRepository.of();
                 case 9:
                     System.out.println("프로그램이 종료됩니다. ");
                     return;
@@ -165,18 +171,21 @@ public class Application {
 
         System.out.print("급여를 입력하세요 :");
         int salary = sc.nextInt();
+        sc.nextLine(); // 버퍼 개행문자 처리용
 
         System.out.print("업무 내용을 입력하세요 : ");
-        String jobDescription = sc.next();
+        String jobDescription = sc.nextLine();
+
 
         System.out.print("입력할 복리후생의 개수를 입력하세요(숫자로 1 이상) : ");
         int length = sc.nextInt();
-//        sc.nextInt(); // 버퍼 개행문자 처리용
+        sc.nextLine(); // 버퍼 개행문자 처리용
+
 
         String[] welfare = new String[length];
         for(int i = 0; i < welfare.length ; i++){
             System.out.print((i+1) + "번째 복리후생을 입력하세요 : ");
-            String input = sc.next();
+            String input = sc.nextLine();
             welfare[i] = input;
         }
 

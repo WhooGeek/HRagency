@@ -8,8 +8,11 @@ import java.util.ArrayList;
 
 public class OfferRepository {
 
+
     private static final ArrayList<OfferInfo> offerList = new ArrayList<>();
     private static final String FILE_PATH = "src/main/java/com/ohgiraffers/db/offerDB.dat";
+
+
 
     public OfferRepository() {
         File file = new File(FILE_PATH);
@@ -24,9 +27,8 @@ public class OfferRepository {
             saveOffers(file, offerInfos);
         }
 
-        if(offerList.isEmpty()){
-            loadUsers(file);
-        }
+        loadOffers(file);
+
     }
 
     public static OfferInfo selectOfferByName(String name) {
@@ -60,6 +62,7 @@ public class OfferRepository {
         }
     }
 
+
     public static OfferInfo selectOfferByJobCode(int code) {
         for(OfferInfo offerInfo : offerList){
             if(offerInfo.getJobCode() == code){
@@ -83,20 +86,38 @@ public class OfferRepository {
         return 0;
     }
 
-    private void loadUsers(File file) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            while(true){
-                OfferInfo offer = (OfferInfo) ois.readObject();
-                if (offer != null) {
-                    offerList.add(offer);
-                }
-            }
-        } catch (EOFException e) {
-            System.out.println("기업 정보를 모두 로딩하였습니다.");
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+    public static void of() {
+        for(int i = 0 ; i < offerList.size() ; i++){
+            System.out.println(offerList);
         }
     }
+
+
+    private void loadOffers(File file) {
+        if (!file.exists()) {
+            System.out.println("파일이 존재하지 않습니다: " + file.getAbsolutePath());
+            return;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            // 파일에서 ArrayList<OfferInfo>를 읽어옴
+            ArrayList<OfferInfo> loadedOffers = (ArrayList<OfferInfo>) ois.readObject();
+            offerList.clear(); // 이전 데이터를 모두 지움
+            for(OfferInfo offer : loadedOffers){
+                offerList.add(offer);// 읽어온 데이터를 추가
+            }
+            System.out.println("기업 정보를 모두 로딩하였습니다.");
+        } catch (EOFException e) {
+            System.out.println("파일이 비어있거나 끝에 도달했습니다.");
+        } catch (IOException e) {
+            System.err.println("파일 입출력 오류: " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.err.println("클래스 정의를 찾을 수 없습니다: " + e.getMessage());
+        }
+    }
+
+
+
 
     public static int insertOffer(OfferInfo offerInfo){
         int result = 0;
@@ -113,6 +134,7 @@ public class OfferRepository {
     }
 
     public static ArrayList<OfferInfo> selectAllOffers() {
+
         return offerList;
     }
 }
