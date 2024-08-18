@@ -166,8 +166,9 @@ public class Application {
         System.out.print("급여를 입력하세요 :");
         int salary = sc.nextInt();
 
+        sc.nextLine();
         System.out.print("업무 내용을 입력하세요 : ");
-        String jobDescription = sc.next();
+        String jobDescription = sc.nextLine();
 
         System.out.print("입력할 복리후생의 개수를 입력하세요(숫자로 1 이상) : ");
         int length = sc.nextInt();
