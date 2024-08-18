@@ -83,14 +83,12 @@ public class OfferRepository {
         return 0;
     }
 
+    @SuppressWarnings("unchecked")
     private void loadUsers(File file) {
+        offerList.clear();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            while(true){
-                OfferInfo offer = (OfferInfo) ois.readObject();
-                if (offer != null) {
-                    offerList.add(offer);
-                }
-            }
+            ArrayList<OfferInfo> loadedList = (ArrayList<OfferInfo>) ois.readObject();
+            offerList.addAll(loadedList);
         } catch (EOFException e) {
             System.out.println("기업 정보를 모두 로딩하였습니다.");
         } catch (IOException | ClassNotFoundException e) {
@@ -98,18 +96,28 @@ public class OfferRepository {
         }
     }
 
+/* 기존 코드 */
+//    public static int insertOffer(OfferInfo offerInfo){
+//        int result = 0;
+//
+//        try(MyObjectOutputStream moos = new MyObjectOutputStream(new FileOutputStream(FILE_PATH, true))){
+//            moos.writeObject(offerInfo);
+//            offerList.add(offerInfo);
+//            result = 1;
+//        } catch(IOException e){
+//            throw new RuntimeException(e);
+//        }
+//
+//        return result;
+//    }
+
+    /* 수정된 코드 */
     public static int insertOffer(OfferInfo offerInfo){
-        int result = 0;
+        offerList.add(offerInfo); // 메모리에 추가
+        File file = new File(FILE_PATH);
+        saveOffers(file, offerList); // 전체 데이터를 다시 파일에 저장
 
-        try(MyObjectOutputStream moos = new MyObjectOutputStream(new FileOutputStream(FILE_PATH, true))){
-            moos.writeObject(offerInfo);
-            offerList.add(offerInfo);
-            result = 1;
-        } catch(IOException e){
-            throw new RuntimeException(e);
-        }
-
-        return result;
+        return 1;
     }
 
     public static ArrayList<OfferInfo> selectAllOffers() {
